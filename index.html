@@ -9,11 +9,18 @@
 <body>
   <h1>Word Chain Race</h1>
   <p>Welcome to Word Chain Race! Create a chain of words by entering a word that starts with the last letter of the previous word. Press "Enter" or click "Submit" to add your word to the chain. Good luck!</p>
-  <p>Current word: <span id="current-word">apple</span></p>
+  <p>Current word: <span id="current-word"></span></p>
   <input type="text" id="input-word" placeholder="Enter the next word" autofocus>
-  <button id="submit-word">Submit</button>
+
+  <button id="submit-btn" onclick="submitWord()">Submit</button>
+
+
   <p>Score: <span id="score">0</span></p>
   <p>Highest Score: <span id="highest-score">0</span></p>
+
+<p id="game-over-message" style="display:none;">Game Over!</p>
+
+
   <button id="start-game">Start Game</button>
   <script src="script.js"></script>
 </body>
