@@ -1,55 +1,80 @@
+
+
 const currentWord = document.getElementById('current-word');
 const inputWord = document.getElementById('input-word');
 const scoreSpan = document.getElementById('score');
 const highestScoreSpan = document.getElementById('highest-score');
 const startGameBtn = document.getElementById('start-game');
+const submitWordBtn = document.getElementById('submit-word');
+const gameOverMessage = document.getElementById('game-over-message');
+
+const timerElement = document.getElementById('timer');
+let timerValue = 30;
 
 let score = 0;
 let highestScore = 0;
 let gameInProgress = false;
-let usedWords = []; // Add this line
-let errorMessage = ""; // Add this line
+let usedWords = [];
 const startingWords = [
-    'apple', 'banana', 'coconut', 'dragonfruit', 'elephant', 'flamingo', 'giraffe', 'hippopotamus',
-    'iguana', 'jaguar', 'kangaroo', 'lemur', 'mongoose', 'narwhal', 'octopus', 'panda',
-    'quail', 'rabbit', 'seal', 'tiger'
-  ];
+  'apple', 'banana', 'coconut', 'dragonfruit', 'elephant', 'flamingo', 'giraffe', 'hippopotamus',
+  'iguana', 'jaguar', 'kangaroo', 'lemur', 'mongoose', 'narwhal', 'octopus', 'panda',
+  'quail', 'rabbit', 'seal', 'tiger'
+];
+
+// Include the hunspell-spellchecker library
+//const Spellchecker = require("hunspell-spellchecker");
+//const spellchecker = new Spellchecker.default();
+//const dictionary = spellchecker.dictionary("en_US");
 
 function getRandomWord() {
-    
-    return startingWords[Math.floor(Math.random() * startingWords.length)];
+  return startingWords[Math.floor(Math.random() * startingWords.length)];
+}
+
+function updateTimerDisplay() {
+    timerElement.textContent = timerValue;
+  }
+
+  
+function countdown() {
+    if (gameInProgress && timerValue > 0) {
+      timerValue--;
+      updateTimerDisplay();
+      if (timerValue === 0) {
+        endGame('Time is up!');
+      }
+    }
   }
   
 
-function startGame() {
-
-    document.getElementById("game-over-message").style.display = "none";
-    
+  function startGame() {
     gameInProgress = true;
     score = 0;
     scoreSpan.textContent = score;
-    currentWord.textContent = getRandomWord(); 
+    currentWord.textContent = getRandomWord();
     inputWord.value = '';
     inputWord.focus();
-    usedWords = []; // Add this line
-    usedWords.push(currentWord.textContent.toLowerCase()); // Add this line
-  
-}
-
-
-
-function endGame() {
-    gameInProgress = false;
-    if (score > highestScore) {
-      highestScore = score;
-      highestScoreSpan.textContent = highestScore;
-    }
-    document.getElementById("game-over-message").innerHTML = `Game Over! ${errorMessage}`; // Update this line
-    document.getElementById("game-over-message").style.display = "block";
+    usedWords = [];
+    usedWords.push(currentWord.textContent.toLowerCase());
+    submitWordBtn.disabled = false; // Enable the submit button
+    gameOverMessage.style.display = "none";
+    timerValue = 30; // Reset the timer value
+    updateTimerDisplay(); // Update the timer display
+    setInterval(countdown, 1000); // Start the countdown
   }
   
 
-  async function isValidWord(word, prevWord) {
+function endGame(reason) {
+  gameInProgress = false;
+  if (score > highestScore) {
+    highestScore = score;
+    highestScoreSpan.textContent = highestScore;
+  }
+  gameOverMessage.textContent = `Game Over! ${reason}`;
+  gameOverMessage.style.display = "block";
+  submitWordBtn.disabled = true; // Disable the submit button
+}
+
+async function isValidWord(word, prevWord) {
     const isRepeatingChar = (word) => {
       for (let i = 1; i < word.length; i++) {
         if (word[i].toLowerCase() !== word[i - 1].toLowerCase()) {
@@ -83,57 +108,36 @@ function endGame() {
   
     return "";
   }
-  
 
   async function submitWord() {
     if (gameInProgress) {
-      const submitBtn = document.getElementById("submit-btn");
-      submitBtn.disabled = true; // Disable the submit button
+      const word = inputWord.value.trim();
+      const prevWord = currentWord.textContent.trim();
+      const validationResult = await isValidWord(word, prevWord);
   
-      const validationResult = await isValidWord(inputWord.value, currentWord.textContent);
       if (validationResult === "") {
-        currentWord.textContent = inputWord.value;
-        usedWords.push(inputWord.value.toLowerCase());
+        currentWord.textContent = word;
+        usedWords.push(word.toLowerCase());
         score++;
         scoreSpan.textContent = score;
       } else {
-        errorMessage = validationResult;
-        endGame();
+        endGame(validationResult);
       }
       inputWord.value = "";
-      submitBtn.disabled = false; // Enable the submit button
+      inputWord.focus();
     }
   }
-  
-  
 
 inputWord.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      submitWord();
-    }
-  });
-
-inputWord.addEventListener('keydown', (event) => {
-  if (event.key === 'Enter' && gameInProgress) {
-
-    if (isValidWord(inputWord.value, currentWord.textContent)) {
-
-      currentWord.textContent = inputWord.value;
-      score++;
-      scoreSpan.textContent = score;
-    } else {
-      endGame();
-    }
-    inputWord.value = '';
+  if (event.key === 'Enter') {
+    submitWord();
   }
 });
 
+startGameBtn.addEventListener('click', startGame);
+submitWordBtn.addEventListener('click', submitWord);
+
+// Start the game on page load
 window.addEventListener("load", startGame);
 
 
-
-startGameBtn.addEventListener('click', startGame);
-
-const submitWordBtn = document.getElementById('submit-word');
-
-submitWordBtn.addEventListener('click', submitWord);
