@@ -3,25 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Word Chain Race</title>
+  <title>Word Chain Game</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Word Chain Race</h1>
-  <p>Welcome to Word Chain Race! Create a chain of words by entering a word that starts with the last letter of the previous word. Press "Enter" or click "Submit" to add your word to the chain. Good luck!</p>
-  <p>Current word: <span id="current-word"></span></p>
-  <input type="text" id="input-word" placeholder="Enter the next word" autofocus>
-
-  <button id="submit-btn" onclick="submitWord()">Submit</button>
-
-
-  <p>Score: <span id="score">0</span></p>
-  <p>Highest Score: <span id="highest-score">0</span></p>
-
-<p id="game-over-message" style="display:none;">Game Over!</p>
-
-
-  <button id="start-game">Start Game</button>
+  <h1>Word Chain Game</h1>
+  <p class="instructions">
+    Create a chain of words where each word starts with the last letter of the previous word. Words cannot be repeated, must be real words, and should have at least two characters. Press Enter or click Submit to enter each word. Good luck!
+  </p>
+  <div class="game-container">
+    <div class="timer" id="timer">30</div>
+    <p class="label">Current Word: <span id="current-word"></span></p>
+    <input type="text" id="input-word" placeholder="Type a word here and press Enter or click Submit">
+    <div class="buttons">
+      <button id="submit-word">Submit</button>
+      <button id="start-game">Restart Game</button>
+    </div>
+    <p class="label">Score: <span id="score">0</span></p>
+    <p class="label">Highest Score: <span id="highest-score">0</span></p>
+    <p id="game-over-message" class="game-over-message"></p>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/hunspell-spellchecker@1.0.6/index.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
