@@ -1,0 +1,14 @@
+{
+  "_comment": "Claude Code MCP server config — run: claude mcp add workiz-booking node /path/to/workiz-booking-plugin/index.js",
+  "mcpServers": {
+    "workiz-booking": {
+      "command": "node",
+      "args": ["index.js"],
+      "cwd": "/ABSOLUTE/PATH/TO/workiz-booking-plugin",
+      "env": {
+        "WORKIZ_SECRET_KEY": "your_workiz_secret_key_here",
+        "WORKIZ_ACCOUNT_ID": "your_account_id_here"
+      }
+    }
+  }
+}

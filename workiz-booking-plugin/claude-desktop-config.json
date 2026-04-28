@@ -1,0 +1,13 @@
+{
+  "_comment": "Add this block to your Claude Desktop claude_desktop_config.json under the 'mcpServers' key.",
+  "mcpServers": {
+    "workiz-booking": {
+      "command": "node",
+      "args": ["/ABSOLUTE/PATH/TO/workiz-booking-plugin/index.js"],
+      "env": {
+        "WORKIZ_SECRET_KEY": "your_workiz_secret_key_here",
+        "WORKIZ_ACCOUNT_ID": "your_account_id_here"
+      }
+    }
+  }
+}
